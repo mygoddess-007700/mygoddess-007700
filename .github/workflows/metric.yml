@@ -1,0 +1,35 @@
+name: metric
+
+on:
+  # Schedule updates (each hour)
+  schedule: [{cron: "0 18 * * *"}]
+  push: {branches: [main]}
+  workflow_dispatch:
+
+jobs:
+  my-job:
+    name: test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Metrics embed
+      uses: lowlighter/metrics@v3.16
+      with:
+        token: ${{ secrets.METRICS_TOKEN }}
+        plugin_isocalendar: yes
+        plugin_isocalendar_duration: full-year # Display full year instead of half year
+        plugin_wakatime: yes
+        plugin_wakatime_token: ${{ secrets.WAKATIME_TOKEN }}      # Required
+        plugin_wakatime_days: 7                                   # Display last week stats
+        plugin_wakatime_sections: time, projects, projects-graphs # Display time and projects sections, along with projects graphs
+        plugin_wakatime_limit: 4                                  # Show 4 entries per graph
+        plugin_wakatime_url: https://wakatime.com                # Wakatime url endpoint
+        plugin_wakatime_user: mygoddess-007700                     # User
+        plugin_habits: yes
+        plugin_habits_from: 200       # Use 200 events to compute habits
+        plugin_habits_days: 14        # Keep only events from last 14 days
+        plugin_habits_facts: yes      # Display facts section
+        plugin_habits_charts: yes     # Display charts section
+        plugin_habits_trim: yes       # Trim unused hours on daily chart
+        config_timezone: Asia/Shanghai # Set timezone
